@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
-import { connPool } from "../database/mysqlConnection.js";
+import { connPool } from '../database/MysqlConn.js';
+// import { connPool } from "../database/mysqlConnection.js";
 
 const saltRound = 10;
 /**
@@ -22,9 +23,7 @@ export const register = async (email, name, password) => {
             }
         } else {
             bcrypt.hash(password, saltRound, async (err, hash) => {
-                console.log(hash);
                 const [result, fields] = await connPool.execute('INSERT INTO  HABBITDB.USERS(EMAIL, NAME, PASSWORD_HASH) VALUES(?,?,?)', [email, name, hash]);
-                console.log(obj1);
             })
             return {
                 status: 200,
@@ -47,6 +46,7 @@ export const register = async (email, name, password) => {
 
 export const login = (email, password) => {
 
+    // const query = 'SELECT N'
 
 }
 
