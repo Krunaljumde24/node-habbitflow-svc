@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express"
 import { connectMysql } from "./database/MysqlConn.js";
-import { authRouter } from "./routes/AuthRouter.js";
+import { authRouter } from "./routes/authRouter.js";
 import { HabbitRouter } from "./routes/HabbitRouter.js";
 import cors from "cors"
 import dotenv from 'dotenv';
