@@ -1,17 +1,14 @@
 import bodyParser from "body-parser";
 import express from "express"
-// import { register } from "./service/authService.js";
 import { connectMysql } from "./database/MysqlConn.js";
 import { authRouter } from "./routes/AuthRouter.js";
 import { HabbitRouter } from "./routes/HabbitRouter.js";
 import cors from "cors"
 import dotenv from 'dotenv';
-
-const app = express();
 dotenv.config();
 
+const app = express();
 const port = process.env.PORT || 8888;
-
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
