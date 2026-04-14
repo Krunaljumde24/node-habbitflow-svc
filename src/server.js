@@ -34,8 +34,13 @@ app.put('/', (req, res) => {
 
 try {
     await connectMysql();
+
+
     app.listen(port, () => {
         console.log(`Express server is running on port ${port}`);
+        console.log('-------------------');
+        console.log(process.env);
+        console.log('-------------------');
     })
 } catch (error) {
     console.log("Failed to start habbitflow-svc express server.");
