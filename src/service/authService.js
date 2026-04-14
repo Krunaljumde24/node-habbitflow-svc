@@ -4,6 +4,7 @@ import { generateToken } from '../utils/JwtUtil.js';
 
 const saltRound = 10;
 const jwtExpiry = process.env.JWT_EXPIRY;
+const database = process.env.MYSQL_SCHEMA;
 
 /**
  * 
@@ -14,7 +15,9 @@ const jwtExpiry = process.env.JWT_EXPIRY;
  */
 export const register = async (email, name, password) => {
     try {
-        const [result] = await connPool.query('SELECT * FROM USERS WHERE EMAIL = ?', [email]);
+        const selectQuery = `SELECT * FROM ${database}.USERS WHERE EMAIL = ?`;
+        console.log(selectQuery);
+        const [result] = await connPool.query(selectQuery, [email]);
         if (Array.isArray(result) && result.length > 0) {
             console.log('User alreay exists');
             return {
@@ -25,7 +28,9 @@ export const register = async (email, name, password) => {
             }
         } else {
             bcrypt.hash(password, saltRound, async (err, hash) => {
-                const [result, fields] = await connPool.execute('INSERT INTO  USERS(EMAIL, NAME, PASSWORD_HASH) VALUES(?,?,?)', [email, name, hash]);
+                let insertQuery = `INSERT INTO ${database}.USERS(EMAIL, NAME, PASSWORD_HASH) VALUES(?,?,?)`;
+                console.log(insertQuery);
+                const [result, fields] = await connPool.execute(insertQuery, [email, name, hash]);
             })
             return {
                 status: 201,
@@ -47,7 +52,9 @@ export const register = async (email, name, password) => {
 
 
 export const login = async (email, password) => {
-    const query = `SELECT ID, EMAIL, NAME, PASSWORD_HASH FROM USERS WHERE EMAIL = ?`;
+    const query = `SELECT ID, EMAIL, NAME, PASSWORD_HASH FROM ${database}.USERS WHERE EMAIL = ?`;
+    console.log(query);
+
     const [result] = await connPool.query(query, [email])
     if (Array.isArray(result) && result.length > 0) {
         let data = result[0];
