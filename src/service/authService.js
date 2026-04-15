@@ -15,7 +15,7 @@ const database = process.env.MYSQL_SCHEMA;
  */
 export const register = async (email, name, password) => {
     try {
-        const selectQuery = `SELECT * FROM ${database}.USERS WHERE EMAIL = ?`;
+        const selectQuery = `select * from ${database}.users where email = ?`;
         console.log(selectQuery);
         const [result] = await connPool.query(selectQuery, [email]);
         if (Array.isArray(result) && result.length > 0) {
@@ -28,7 +28,7 @@ export const register = async (email, name, password) => {
             }
         } else {
             bcrypt.hash(password, saltRound, async (err, hash) => {
-                let insertQuery = `INSERT INTO ${database}.USERS(EMAIL, NAME, PASSWORD_HASH) VALUES(?,?,?)`;
+                let insertQuery = `insert into ${database}.users(email, name, password_hash) values(?,?,?)`;
                 console.log(insertQuery);
                 const [result, fields] = await connPool.execute(insertQuery, [email, name, hash]);
             })
@@ -52,18 +52,18 @@ export const register = async (email, name, password) => {
 
 
 export const login = async (email, password) => {
-    const query = `SELECT ID, EMAIL, NAME, PASSWORD_HASH FROM ${database}.USERS WHERE EMAIL = ?`;
+    const query = `select id, email, name, password_hash from ${database}.users where email = ?`;
     console.log(query);
 
     const [result] = await connPool.query(query, [email])
     if (Array.isArray(result) && result.length > 0) {
         let data = result[0];
-        const isValidCred = await bcrypt.compare(password, data.PASSWORD_HASH);
+        const isValidCred = await bcrypt.compare(password, data.password_hash);
         if (isValidCred) {
             let user = {
-                "id": data.ID,
-                "name": data.NAME,
-                "email": data.EMAIL
+                "id": data.id,
+                "name": data.name,
+                "email": data.email
             }
             const token = generateToken(user)
             return {
