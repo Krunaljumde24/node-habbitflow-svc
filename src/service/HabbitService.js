@@ -89,8 +89,9 @@ const toggleHabbitStatus = async (hId, uId, logDate, note, status) => {
         const [result] = await connPool.query(selectQuery, [hId, uId])
         console.log(result);
         if (Array.isArray(result) && result.length > 0) {
-            const updateQuery = 'update habit_logs set completed = ?, note  habit_id =, user_id, log_date, note) VALUES (?,?,?,?)';
-            console.log('update hone chiye');
+            const updateQuery = 'update habit_logs set log_date = ? , completed = ? where habit_id = ? and user_id = ? ';
+            const result = await connPool.execute(updateQuery, [logDate, status, hId, uId]);
+            console.log(result);
             obj = {
                 status: 201,
                 response: {

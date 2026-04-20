@@ -51,7 +51,7 @@ HabbitRouter.post('/api/habbits', async (req, res) => {
 
 HabbitRouter.post('/api/habbits/log', async (req, res) => {
     const { hId, uId, logDate, note, status } = req.body;
-    if (!uId || !hId || !status) {
+    if (!uId || !hId || status === undefined) {
         res.status(400).json({
             error: "Invalid request details."
         });
