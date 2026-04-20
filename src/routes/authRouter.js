@@ -22,7 +22,7 @@ authRouter.post('/api/auth/register', async (req, res, next) => {
 
 authRouter.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
-    if (!email?.trim() || !password?.trim()) {
+    if (req.body == undefined || !email?.trim() || !password?.trim()) {
         res.status(400).json({
             error: "Invalid request details."
         })

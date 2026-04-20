@@ -16,7 +16,6 @@ const database = process.env.MYSQL_SCHEMA;
 export const register = async (email, name, password) => {
     try {
         const selectQuery = `select * from ${database}.users where email = ?`;
-        console.log(selectQuery);
         const [result] = await connPool.query(selectQuery, [email]);
         if (Array.isArray(result) && result.length > 0) {
             console.log('User alreay exists');
@@ -29,7 +28,6 @@ export const register = async (email, name, password) => {
         } else {
             bcrypt.hash(password, saltRound, async (err, hash) => {
                 let insertQuery = `insert into ${database}.users(email, name, password_hash) values(?,?,?)`;
-                console.log(insertQuery);
                 const [result, fields] = await connPool.execute(insertQuery, [email, name, hash]);
             })
             return {
@@ -53,8 +51,6 @@ export const register = async (email, name, password) => {
 
 export const login = async (email, password) => {
     const query = `select id, email, name, password_hash from ${database}.users where email = ?`;
-    console.log(query);
-
     const [result] = await connPool.query(query, [email])
     if (Array.isArray(result) && result.length > 0) {
         let data = result[0];
