@@ -13,7 +13,7 @@ const port = process.env.PORT || 8888;
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: process.env.APP_URL
 }))
 
 app.use(authRouter)
